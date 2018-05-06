@@ -193,7 +193,9 @@ def main(args):
             bottle_count = len([i for i in classes if i == 40])
             bottle_list = ['bottle_%d' % i for i in range(bottle_count)]
             whichObject_strEndFrame_all['bottle_list'] = ['bottle_%d' % i for i in range(bottle_count)]
-            
+        
+        print(classes)
+        
         if 1 not in classes and not in_hand_event:
             continue
             
@@ -332,28 +334,32 @@ def WhichIsTaken_fun(S, S_prime, bottle_list):
         for object_prime_mask in S_prime:
             mask_xor = np.bitwise_xor(object_mask, object_prime_mask)
             result_xor.append(mask_xor.sum())
-        Objects_minXor[object_name] = min(result_xor)
-
+        if not result_xor:
+            Objects_minXor[object_name] = 30000
+        else:
+            Objects_minXor[object_name] = min(result_xor)
+            
     Objects_minXor_sort = sorted(Objects_minXor.items(), key=lambda x: x[1], reverse=True)
-
-    # print(Objects_minXor_sort)
-
-    WhichIsTaken_relative = Objects_minXor_sort[0][0]
-#     WhichIsTaken_list = []
-#     for which in [which for which, xor in Objects_minXor_sort if xor>25000]:
-#         try:
-#             WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])))
-#         except:
-#             WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])-1))
-#     WhichIsTaken = ','.join(str(x) for x in WhichIsTaken_list)
+    
+    WhichIsTaken_list = []
+    for which in [which for which, xor in Objects_minXor_sort if xor>25000]:
+        try:
+            WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])))
+        except:
+            WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])-1))
+    WhichIsTaken = ','.join(str(x) for x in WhichIsTaken_list)
 
 #     print(bottle_list)
 #     print(int(WhichIsTaken_relative.split('_')[1]))
-    try:
-        WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1]))
-    except:
-        WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1])-1)
-    #Clear S and S_prime for next hand event
+
+#     Objects_minXor_sort = sorted(Objects_minXor.items(), key=lambda x: x[1], reverse=True)
+#     WhichIsTaken_relative = Objects_minXor_sort[0][0]
+    
+#     try:
+#         WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1]))
+#     except:
+#         WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1])-1)
+
     
     return WhichIsTaken, bottle_list
 
