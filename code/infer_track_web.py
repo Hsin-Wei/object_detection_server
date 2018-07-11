@@ -189,7 +189,7 @@ def main(args):
 
         #sign 1 = person, 40 = bottle
         #Get how many bottles in first frame
-        if (i == 0):
+        if (i == 20):
             bottle_count = len([i for i in classes if i == 40])
             bottle_list = ['bottle_%d' % i for i in range(bottle_count)]
             whichObject_strEndFrame_all['bottle_list'] = ['bottle_%d' % i for i in range(bottle_count)]
@@ -342,23 +342,26 @@ def WhichIsTaken_fun(S, S_prime, bottle_list):
     Objects_minXor_sort = sorted(Objects_minXor.items(), key=lambda x: x[1], reverse=True)
     
     WhichIsTaken_list = []
-    for which in [which for which, xor in Objects_minXor_sort if xor>25000]:
-        try:
-            WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])))
-        except:
-            WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])-1))
-    WhichIsTaken = ','.join(str(x) for x in WhichIsTaken_list)
+    
+#     #XOR > pixel
+#     for which in [which for which, xor in Objects_minXor_sort if xor>25000]:
+#         try:
+#             WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])))
+#         except:
+#             WhichIsTaken_list.append(bottle_list.pop(int(which.split('_')[1])-1))
+#     WhichIsTaken = ','.join(str(x) for x in WhichIsTaken_list)
 
 #     print(bottle_list)
 #     print(int(WhichIsTaken_relative.split('_')[1]))
-
-#     Objects_minXor_sort = sorted(Objects_minXor.items(), key=lambda x: x[1], reverse=True)
-#     WhichIsTaken_relative = Objects_minXor_sort[0][0]
     
-#     try:
-#         WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1]))
-#     except:
-#         WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1])-1)
+    #Get first
+    Objects_minXor_sort = sorted(Objects_minXor.items(), key=lambda x: x[1], reverse=True)
+    WhichIsTaken_relative = Objects_minXor_sort[0][0]
+    
+    try:
+        WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1]))
+    except:
+        WhichIsTaken = bottle_list.pop(int(WhichIsTaken_relative.split('_')[1])-1)
 
     
     return WhichIsTaken, bottle_list

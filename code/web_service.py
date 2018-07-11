@@ -61,26 +61,26 @@ def upload_file ():
         return 'error in server side'
     
 
-@app.route('/result/coordinate', methods=['GET'])
-def result_coordinate():
-    now = datetime.datetime.now()
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
-    app.config['RESULT_FOLDER'] = RESULT_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
+# @app.route('/result/coordinate', methods=['GET'])
+# def result_coordinate():
+#     now = datetime.datetime.now()
+#     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
+#     app.config['RESULT_FOLDER'] = RESULT_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
     
-    if not os.path.exists(app.config['RESULT_FOLDER']):
-            os.makedirs(app.config['RESULT_FOLDER'])
+#     if not os.path.exists(app.config['RESULT_FOLDER']):
+#             os.makedirs(app.config['RESULT_FOLDER'])
     
-    os.system('/root/object_detection_server/code/infer_for_web.py \
-    --cfg /detectron/configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
-    --output-dir ' + app.config['RESULT_FOLDER'] + '\
-    --image-ext jpg \
-    --wts /root/object_detection_server/code/model/model_final.pkl \
-    ' + app.config['UPLOAD_FOLDER'])
+#     os.system('/root/object_detection_server/code/infer_for_web.py \
+#     --cfg /detectron/configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
+#     --output-dir ' + app.config['RESULT_FOLDER'] + '\
+#     --image-ext jpg \
+#     --wts /root/object_detection_server/code/model/model_final.pkl \
+#     ' + app.config['UPLOAD_FOLDER'])
     
-    with open (app.config['RESULT_FOLDER'] + '/output.json', "r") as myfile:
-        data=myfile.read()
+#     with open (app.config['RESULT_FOLDER'] + '/output.json', "r") as myfile:
+#         data=myfile.read()
     
-    return data
+#     return data
 
 
 @app.route('/result/track', methods=['GET'])
@@ -96,7 +96,6 @@ def result_track():
     --cfg /detectron/configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
     --output-dir ' + app.config['RESULT_FOLDER'] + '\
     --image-ext jpg \
-    --gap-threshold 3 \
     --wts /root/object_detection_server/code/model/model_final.pkl \
     ' + app.config['UPLOAD_FOLDER'])
     
