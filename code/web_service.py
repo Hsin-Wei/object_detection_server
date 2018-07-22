@@ -83,8 +83,8 @@ def upload_file ():
 #     return data
 
 
-@app.route('/result/track', methods=['GET'])
-def result_track():
+@app.route('/result/track_bottle', methods=['GET'])
+def result_bottle_track():
     now = datetime.datetime.now()
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
     app.config['RESULT_FOLDER'] = RESULT_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
@@ -92,10 +92,32 @@ def result_track():
     if not os.path.exists(app.config['RESULT_FOLDER']):
             os.makedirs(app.config['RESULT_FOLDER'])
     
-    os.system('/root/object_detection_server/code/infer_track_web.py \
+    os.system('/root/object_detection_server/code/infer_track_bottle_web.py \
     --cfg /detectron/configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
     --output-dir ' + app.config['RESULT_FOLDER'] + '\
     --image-ext jpg \
+    --wts /root/object_detection_server/code/model/model_final.pkl \
+    ' + app.config['UPLOAD_FOLDER'])
+    
+    with open (app.config['RESULT_FOLDER'] + '/output.json', "r") as myfile:
+        data=myfile.read()
+    
+    return data
+
+@app.route('/result/track_all', methods=['GET'])
+def result_all_track():
+    now = datetime.datetime.now()
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
+    app.config['RESULT_FOLDER'] = RESULT_FOLDER + '/' + ('%s%s%s' % (now.year, now.month, now.day))
+    
+    if not os.path.exists(app.config['RESULT_FOLDER']):
+            os.makedirs(app.config['RESULT_FOLDER'])
+    
+    os.system('/root/object_detection_server/code/infer_track_all_web.py \
+    --cfg /detectron/configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
+    --output-dir ' + app.config['RESULT_FOLDER'] + '\
+    --image-ext jpg \
+    --interested-object "40,74" \
     --wts /root/object_detection_server/code/model/model_final.pkl \
     ' + app.config['UPLOAD_FOLDER'])
     
